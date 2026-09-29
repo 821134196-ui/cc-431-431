@@ -1,0 +1,13 @@
+{
+  "name": "ice-cream-freezer-management",
+  "version": "1.0.0",
+  "description": "冰淇淋冷柜温度与批次换货系统",
+  "main": "start.js",
+  "scripts": {
+    "start": "node --no-warnings start.js",
+    "test": "node --no-warnings tests/run-tests.js"
+  },
+  "keywords": ["freezer", "temperature", "batch", "exchange", "ice-cream"],
+  "author": "",
+  "license": "MIT"
+}

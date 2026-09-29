@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>冰淇淋冷柜温度与批次换货系统</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🍦</span>
+        <h1>冰雪冷柜管理</h1>
+      </div>
+      <nav class="main-nav">
+        <button class="nav-btn active" data-view="overview">冷柜总览</button>
+        <button class="nav-btn" data-view="lanes">货道库存</button>
+        <button class="nav-btn" data-view="temperature">温度曲线</button>
+        <button class="nav-btn" data-view="near-expiry">临期队列</button>
+        <button class="nav-btn" data-view="exchange">换货单</button>
+        <button class="nav-btn" data-view="recycling">回收对账</button>
+        <button class="nav-btn" data-view="tasks">任务中心</button>
+      </nav>
+      <div class="store-selector">
+        <label>门店：</label>
+        <select id="store-select">
+          <option value="">全部门店</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <!-- 冷柜总览 -->
+    <section id="view-overview" class="view active">
+      <div class="view-header">
+        <h2>冷柜总览</h2>
+        <button class="btn btn-primary" onclick="refreshAll()">刷新数据</button>
+      </div>
+      <div class="stats-grid" id="overview-stats"></div>
+      <div class="freezer-grid" id="freezer-grid"></div>
+    </section>
+
+    <!-- 货道库存 -->
+    <section id="view-lanes" class="view">
+      <div class="view-header">
+        <h2>货道库存</h2>
+        <div class="freezer-selector">
+          <label>选择冷柜：</label>
+          <select id="lane-freezer-select"></select>
+        </div>
+      </div>
+      <div class="lane-matrix" id="lane-matrix"></div>
+    </section>
+
+    <!-- 温度曲线 -->
+    <section id="view-temperature" class="view">
+      <div class="view-header">
+        <h2>温度曲线</h2>
+        <div class="temp-controls">
+          <label>冷柜：</label>
+          <select id="temp-freezer-select"></select>
+          <label>时间：</label>
+          <select id="temp-hours-select">
+            <option value="6">近6小时</option>
+            <option value="12">近12小时</option>
+            <option value="24" selected>近24小时</option>
+            <option value="48">近48小时</option>
+          </select>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas id="temperature-chart"></canvas>
+      </div>
+      <div class="temp-legend">
+        <span class="legend-item"><span class="legend-box" style="background:#e8f5e9"></span>合格区间</span>
+        <span class="legend-item"><span class="legend-line" style="background:#1a237e"></span>温度曲线</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#c62828"></span>超限点</span>
+      </div>
+    </section>
+
+    <!-- 临期队列 -->
+    <section id="view-near-expiry" class="view">
+      <div class="view-header">
+        <h2>临期队列</h2>
+        <div class="layer-legend">
+          <span class="layer-tag layer-critical">紧急 (≤1天)</span>
+          <span class="layer-tag layer-urgent">紧迫 (≤3天)</span>
+          <span class="layer-tag layer-warning">预警 (≤7天)</span>
+        </div>
+      </div>
+      <div class="near-expiry-list" id="near-expiry-list"></div>
+    </section>
+
+    <!-- 换货单 -->
+    <section id="view-exchange" class="view">
+      <div class="view-header">
+        <h2>换货单</h2>
+        <div class="filter-tabs">
+          <button class="filter-btn active" data-status="">全部</button>
+          <button class="filter-btn" data-status="pending">待确认</button>
+          <button class="filter-btn" data-status="clerk_confirmed">店员已确认</button>
+          <button class="filter-btn" data-status="delivery_confirmed">配送员已确认</button>
+          <button class="filter-btn" data-status="completed">已完成</button>
+        </div>
+      </div>
+      <div class="exchange-list" id="exchange-list"></div>
+    </section>
+
+    <!-- 回收对账 -->
+    <section id="view-recycling" class="view">
+      <div class="view-header">
+        <h2>回收对账</h2>
+      </div>
+      <div class="recycling-list" id="recycling-list"></div>
+    </section>
+
+    <!-- 任务中心 -->
+    <section id="view-tasks" class="view">
+      <div class="view-header">
+        <h2>任务中心</h2>
+        <button class="btn btn-primary" onclick="runTaskChecks()">运行检查</button>
+      </div>
+      <div class="task-list" id="task-list"></div>
+    </section>
+  </main>
+
+  <!-- 模态框 -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">标题</h3>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
